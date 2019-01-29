@@ -12,11 +12,12 @@ namespace TripGallery.MVCClient.Models
         public List<Picture> Pictures { get; set; }
 
         public Guid TripId { get; set; }
-
+               
         public PicturesIndexViewModel(List<Picture> pictures, Guid tripId)
         {
             Pictures = pictures;
             TripId = tripId;
         }
+
     }
 }

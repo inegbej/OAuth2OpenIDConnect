@@ -53,7 +53,7 @@ namespace TripGallery.MVCClient.Controllers
             }
         }
 
-        // GET: Trips/Details/5
+        // GET: Trips/Details/5       
         public ActionResult Details(int id)
         {
             return View();
@@ -112,7 +112,6 @@ namespace TripGallery.MVCClient.Controllers
 
         public async Task<ActionResult> SwitchPrivacyLevel(Guid id, bool isPublic)
         {
-
             // create a patchdocument to change the privacy level of this trip
 
             JsonPatchDocument<Trip> tripPatchDoc = new JsonPatchDocument<Trip>();

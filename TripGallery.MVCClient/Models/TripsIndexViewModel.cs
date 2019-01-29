@@ -10,8 +10,6 @@ namespace TripGallery.MVCClient.Models
     public class TripsIndexViewModel
     {
         public List<Trip> Trips { get; set; }
- 
-
 
         public TripsIndexViewModel()
         {
