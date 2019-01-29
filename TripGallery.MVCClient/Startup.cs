@@ -25,7 +25,6 @@ namespace TripGallery.MVCClient
 
         public void Configuration(IAppBuilder app)
         {
-            // Reset the mapping dictionary, ensuring the claim types aren't mapped to .net claim types
             JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
 
             // Enable antiforgery token
@@ -39,10 +38,8 @@ namespace TripGallery.MVCClient
                 SlidingExpiration = true
             });
 
-            // Add the openID Connect middleware for authentication
             app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
             {
-
                 ClientId = "tripgalleryhybrid",
                 Authority = Constants.TripGallerySTS,
                 RedirectUri = Constants.TripGalleryMVC,
@@ -104,22 +101,17 @@ namespace TripGallery.MVCClient
                             tokenClientForRefreshToken.RequestAuthorizationCodeAsync(
                             n.ProtocolMessage.Code,
                             Constants.TripGalleryMVC);
-
-                        // Fire a request passing in the authorization code and the redirect uri. This return a response for our refresh token. allow us to save the token for use later on.
+                                                
                         var expirationDateAsRoundtripString
                             = DateTime.SpecifyKind(DateTime.UtcNow.AddSeconds(refreshResponse.ExpiresIn)
-                            , DateTimeKind.Utc).ToString("o");   // o format fdor the date technique, preserve the time for all local and universal times
+                            , DateTimeKind.Utc).ToString("o");   
 
                         // Saves the time the access token expires. allows us for easier checks later on
                         newClaimsIdentity.AddClaim(new Claim("id_token", refreshResponse.IdentityToken));
                         newClaimsIdentity.AddClaim(new Claim("refresh_token", refreshResponse.RefreshToken));
                         newClaimsIdentity.AddClaim(new Claim("access_token", refreshResponse.AccessToken));
-                        newClaimsIdentity.AddClaim(new Claim("expires_at", expirationDateAsRoundtripString));
-
-                        // add the access token so we can access it later on 
-                        //newClaimsIdentity.AddClaim(new Claim("access_token", n.ProtocolMessage.AccessToken));
-
-                        // create a new authentication ticket, overwriting the old one.
+                        newClaimsIdentity.AddClaim(new Claim("expires_at", expirationDateAsRoundtripString));                                           
+                        
                         n.AuthenticationTicket = new AuthenticationTicket(
                                                  newClaimsIdentity,
                                                  n.AuthenticationTicket.Properties);
