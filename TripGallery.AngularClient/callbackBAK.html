@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <script>
+        // if the URI contains a #, try to process the token.
+        if (window.location.hash) {
+            processTokenCallback();
+        }
+
+
+        function processTokenCallback() {
+            
+            var hash = window.location.hash.substr(1);
+
+            // split the uri and get the token
+            var result = hash.split('&').reduce(function (result, item) {
+                var parts = item.split('=');
+                result[parts[0]] = parts[1];
+                return result;
+            }, {});
+            // if we have a token, store it in local storage.
+            if (!result.error && result.access_token !== undefined) {
+                localStorage["access_token"] = result.access_token;
+
+                // redirect           
+                window.location = window.location.protocol + "//" + window.location.host + "/";
+            }
+            else {
+                alert("Error: " + (error.message || error));
+            }
+        }
+    </script>
+</body>
+</html>
